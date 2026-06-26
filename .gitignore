@@ -1,0 +1,18 @@
+# Python virtual environment
+venv/
+
+# Python compiled bytecode
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Application caches and data logs
+feed_cache.json
+sent_tweets.json
+
+# IDEs and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
