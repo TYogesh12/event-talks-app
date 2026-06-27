@@ -51,6 +51,7 @@ function initElements() {
         emptyState: document.getElementById('emptyState'),
         btnClearFilters: document.getElementById('btnClearFilters'),
         tweetsHistory: document.getElementById('tweetsHistory'),
+        btnExportCSV: document.getElementById('btnExportCSV'),
         
         // Modal
         tweetModal: document.getElementById('tweetModal'),
@@ -74,6 +75,7 @@ function initElements() {
     elements.btnRefresh.addEventListener('click', () => fetchReleases(true));
     elements.searchInput.addEventListener('input', handleSearchInput);
     elements.btnClearFilters.addEventListener('click', resetFilters);
+    elements.btnExportCSV.addEventListener('click', exportToCSV);
     
     // Filter chips
     elements.filterChips.querySelectorAll('.chip').forEach(chip => {
@@ -215,6 +217,66 @@ function resetFilters() {
     elements.filterChips.querySelector('[data-type="all"]').classList.add('active');
     currentFilterType = 'all';
     filterAndRenderTimeline();
+}
+
+// Get currently filtered list of updates
+function getFilteredUpdates() {
+    const filtered = [];
+    releaseEntries.forEach(entry => {
+        entry.updates.forEach(update => {
+            if (currentFilterType !== 'all' && update.type.toLowerCase() !== currentFilterType.toLowerCase()) {
+                return;
+            }
+            if (currentSearchQuery) {
+                const textMatch = update.text.toLowerCase().includes(currentSearchQuery);
+                const typeMatch = update.type.toLowerCase().includes(currentSearchQuery);
+                const dateMatch = entry.date.toLowerCase().includes(currentSearchQuery);
+                if (!textMatch && !typeMatch && !dateMatch) return;
+            }
+            filtered.push({
+                date: entry.date,
+                type: update.type,
+                text: update.text,
+                link: entry.link
+            });
+        });
+    });
+    return filtered;
+}
+
+// Export filtered updates to CSV
+function exportToCSV() {
+    const updates = getFilteredUpdates();
+    if (updates.length === 0) {
+        showToast('Export Failed', 'No release notes match the current filters to export.', 'error');
+        return;
+    }
+    
+    // Create CSV header
+    let csvRows = ['"Date","Type","Content","Link"'];
+    
+    // Add data rows
+    updates.forEach(item => {
+        const date = item.date.replace(/"/g, '""');
+        const type = item.type.replace(/"/g, '""');
+        const text = item.text.replace(/"/g, '""');
+        const link = item.link.replace(/"/g, '""');
+        
+        csvRows.push(`"${date}","${type}","${text}","${link}"`);
+    });
+    
+    const csvString = csvRows.join('\n');
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `bigquery_release_notes_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    
+    link.click();
+    document.body.removeChild(link);
+    showToast('Export Success', `Exported ${updates.length} release notes to CSV!`, 'success');
 }
 
 // Filter release entries and render timeline
