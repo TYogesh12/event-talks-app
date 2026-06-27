@@ -42,6 +42,73 @@
     --font-heading: 'Space Grotesk', sans-serif;
 }
 
+body.light-theme {
+    --bg-dark: #f8fafc;
+    --bg-main: #f1f5f9;
+    --bg-sidebar: #ffffff;
+    --bg-card: rgba(255, 255, 255, 0.85);
+    --bg-card-hover: rgba(255, 255, 255, 0.95);
+    
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-glow: rgba(37, 99, 235, 0.15);
+    
+    --text-primary: #0f172a;
+    --text-muted: #334155;
+    --text-dim: #64748b;
+    --border-color: rgba(15, 23, 42, 0.08);
+    --border-hover: rgba(37, 99, 235, 0.25);
+    
+    /* Type background overrides for visibility in light theme */
+    --color-feature-bg: rgba(16, 185, 129, 0.08);
+    --color-change-bg: rgba(79, 70, 229, 0.08);
+    --color-deprecation-bg: rgba(244, 63, 94, 0.08);
+    --color-general-bg: rgba(234, 179, 8, 0.08);
+}
+
+/* Light Theme Component Overrides */
+body.light-theme .header-title h1 {
+    background: linear-gradient(135deg, #0f172a 30%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.light-theme .search-box input,
+body.light-theme .tweet-editor-container textarea {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+body.light-theme .search-box input:focus,
+body.light-theme .tweet-editor-container textarea:focus {
+    background-color: #ffffff;
+}
+
+body.light-theme .source-preview-card {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+body.light-theme .update-card {
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+}
+
+body.light-theme .update-card:hover {
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+}
+
+body.light-theme .filters-section,
+body.light-theme .tweet-log-card,
+body.light-theme .cache-indicator {
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.02);
+}
+
+body.light-theme ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+}
+
+body.light-theme ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;

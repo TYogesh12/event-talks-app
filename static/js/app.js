@@ -31,6 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize elements
     initElements();
     
+    // Initialize theme
+    initTheme();
+    
     // Fetch initial data
     fetchReleases();
     fetchTweets();
@@ -52,6 +55,8 @@ function initElements() {
         btnClearFilters: document.getElementById('btnClearFilters'),
         tweetsHistory: document.getElementById('tweetsHistory'),
         btnExportCSV: document.getElementById('btnExportCSV'),
+        btnThemeToggle: document.getElementById('btnThemeToggle'),
+        themeIcon: document.getElementById('themeIcon'),
         
         // Modal
         tweetModal: document.getElementById('tweetModal'),
@@ -76,6 +81,7 @@ function initElements() {
     elements.searchInput.addEventListener('input', handleSearchInput);
     elements.btnClearFilters.addEventListener('click', resetFilters);
     elements.btnExportCSV.addEventListener('click', exportToCSV);
+    elements.btnThemeToggle.addEventListener('click', toggleTheme);
     
     // Filter chips
     elements.filterChips.querySelectorAll('.chip').forEach(chip => {
@@ -100,6 +106,32 @@ function initElements() {
     elements.tweetModal.addEventListener('click', (e) => {
         if (e.target === elements.tweetModal) closeModal();
     });
+}
+
+// Initialize theme from localStorage
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+        elements.themeIcon.className = 'fa-solid fa-moon';
+    } else {
+        document.body.classList.remove('light-theme');
+        elements.themeIcon.className = 'fa-solid fa-sun';
+    }
+}
+
+// Toggle theme between dark and light mode
+function toggleTheme() {
+    const isLight = document.body.classList.toggle('light-theme');
+    if (isLight) {
+        localStorage.setItem('theme', 'light');
+        elements.themeIcon.className = 'fa-solid fa-moon';
+        showToast('Theme Changed', 'Switched to Light Mode', 'info');
+    } else {
+        localStorage.setItem('theme', 'dark');
+        elements.themeIcon.className = 'fa-solid fa-sun';
+        showToast('Theme Changed', 'Switched to Dark Mode', 'info');
+    }
 }
 
 // Clean text to fit better inside a tweet quote
